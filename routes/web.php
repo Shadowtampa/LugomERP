@@ -43,12 +43,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('users', [UserController::class, 'index'])->name('users.index');
 
 
-Route::get('produtos', [ProductController::class, 'index'])->name('produtos');
-Route::get('produtos/create', [ProductController::class, 'create'])->name('produtos.create');
-Route::get('/produtos{product_id}', [ProductController::class, 'edit'])->name('products.edit');
-Route::put('/produtos{$product_id}', [ProductController::class, 'update'])->name('products.update');
-// Route::delete('/produtos{$product_id}', [ProductController::class, 'destroy'])->name('products.destroy');
-Route::get('/produtos{product_id}/create', [ProductPriceController::class, 'create'])->name('productprices.create');
+Route::prefix('produtos')->name('produtos.')->group(function () {
+    Route::get('', [ProductController::class, 'index'])->name('index');
+    Route::get('/create', [ProductController::class, 'create'])->name('create');
+    Route::get('/{product_id}', [ProductController::class, 'edit'])->name('edit');
+    Route::put('/{product_id}', [ProductController::class, 'update'])->name('update');
+    Route::delete('/{product_id}', [ProductController::class, 'destroy'])->name('destroy');
+});
+
+Route::get('/produtos/{product_id}/create', [ProductPriceController::class, 'create'])->name('productprices.create');
+Route::get('/priceproduct{priceproduct_id}', [ProductPriceController::class, 'edit'])->name('productprices.edit');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

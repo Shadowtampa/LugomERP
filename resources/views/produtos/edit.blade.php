@@ -9,7 +9,7 @@
         </div>
     </header>
     <div class="container mx-auto mt-8">
-        <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-md overflow-hidden shadow-md">
+        <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-md shadow-md">
             <div class="p-6">
                 <form action="{{ route('produto.update', $product->id) }}" method="POST">
                     @csrf

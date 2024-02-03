@@ -11,54 +11,38 @@
     <div class="container mx-auto mt-8">
         <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-md overflow-hidden shadow-md">
             <div class="p-6">
-                <form action="{{ route('produto.update', $product->id) }}" method="POST">
+                <form action="{{ route('priceproduct.update', $price->id) }}" method="POST">
                     @csrf
-                    @method('PUT')
+                    @method('PUT') {{-- Usamos o método PUT para indicar que é uma atualização --}}
+
+                    <input type="hidden" name="product_id" value="{{ old('price', $price->product_id) }}">
 
                     <div class="mb-4">
-                        <label for="title" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                            Título:
+                        <label for="price" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
+                            Preço:
                         </label>
-                        <input type="text" name="title" id="title" class="w-full border rounded-md py-2 px-3"
-                            value="{{ old('title', $product->title) }}" required>
+                        <input type="text" name="price" id="price" class="w-full border rounded-md py-2 px-3"
+                            pattern="^\d+(\.\d{1,2})?$" title="Informe um valor em dinheiro válido (ex: 123.45)"
+                            value="{{ old('price', $price->price) }}" required>
+                        <small class="text-gray-500">Informe um valor em dinheiro válido (ex: 123.45)</small>
                     </div>
 
                     <div class="mb-4">
-                        <label for="image_url" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                            URL da Imagem:
+                        <label for="isSale" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
+                            Está em promoção:
                         </label>
-                        <input type="text" name="image_url" id="image_url" class="w-full border rounded-md py-2 px-3"
-                            value="{{ old('image_url', $product->image_url) }}" required>
+                        <input type="checkbox" name="isSale" id="isSale" class="border rounded-md py-2 px-3"
+                            {{ $price->isSale ? 'checked' : '' }}>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="description" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                            Descrição:
-                        </label>
-                        <textarea name="description" id="description" class="w-full border rounded-md py-2 px-3" required>{{ old('description', $product->description) }}</textarea>
+                    <div class="mt-4">
+                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">
+                            Atualizar Produto
+                        </button>
                     </div>
+                </form>
 
-                    <div class="mb-4">
-                        <label for="category" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                            Categoria:
-                        </label>
-                        <input type="text" name="category" id="category" class="w-full border rounded-md py-2 px-3"
-                            value="{{ old('category', $product->category) }}" required>
-                    </div>
-
-                    {!! $html->table(['class' => 'table table-bordered'], true) !!}
-
-                <div class="mt-4">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">
-                        Atualizar Produto
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
 @endsection
-
-@push('scripts')
-    {!! $html->scripts() !!}
-@endpush

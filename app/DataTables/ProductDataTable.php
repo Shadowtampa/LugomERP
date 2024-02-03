@@ -17,7 +17,7 @@ class ProductDataTable extends DataTable
     {
         return (new EloquentDataTable($query))->setRowId('id')->addColumn('actions', function (Product $product) {
             return '
-                <a href="' . route('products.edit', $product->id) . '" class="btn btn-warning btn-sm">Edit</a>
+                <a href="' . route('produtos.edit', $product->id) . '" class="btn btn-warning btn-sm">Edit</a>
                 <form action="' . route('produto.destroy', $product->id) . '" method="POST" style="display:inline">
                     ' . csrf_field() . '
                     ' . method_field('DELETE') . '

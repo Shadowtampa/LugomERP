@@ -14,7 +14,7 @@
                 <form action="{{ route('priceproduct.store') }}" method="POST">
                     @csrf
 
-                    <input type="hidden" name="page_id" value="{{ str_replace('produtos', '', request()->segment(1)) }}">
+                    <input type="hidden" name="page_id" value="{{ str_replace('produtos', '', request()->segment(2)) }}">
 
                     <div class="mb-4">
                         <label for="price" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">

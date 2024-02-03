@@ -32,7 +32,6 @@ class ProductPriceController extends Controller
     {
         $requestData = $request->all();
 
-
         // Verifica se "isSale" está presente no array, se não estiver, define como false
         $isSale = isset($requestData['isSale']) ? true : false;
 
@@ -45,7 +44,7 @@ class ProductPriceController extends Controller
         ]);
 
         // Redirect to a view or route after successfully storing the product
-        return redirect("produtos{$requestData['page_id']}")->with('success', 'Price created successfully');
+        return redirect("produtos/{$requestData['page_id']}")->with('success', 'Price created successfully');
 
     }
 
@@ -60,24 +59,54 @@ class ProductPriceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProductPrice $productPrice)
+    public function edit($id)
     {
-        //
+        $price = ProductPrice::findOrFail($id);
+
+
+
+
+        return view('productprices.edit', compact('price'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductPriceRequest $request, ProductPrice $productPrice)
+    public function update(UpdateProductPriceRequest $request, $id)
     {
-        //
+        // Encontrar o produto pelo ID
+        $price = ProductPrice::findOrFail($id);
+    
+        $isSale = isset($request['isSale']) ? true : false;
+    
+        // Atualizar apenas os campos específicos permitidos no modelo
+        $price->update([
+            'isSale' => $isSale,
+            'price' => $request['price'],
+        ]);
+    
+        return redirect("produtos/{$price->product_id}")->with('success', 'Price created successfully');
+
     }
+    
+    
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductPrice $productPrice)
+    public function destroy($id)
     {
+
+        $price = ProductPrice::findOrFail($id);
+
+        $product = $price->product_id;
+
+        // Update the product with the validated data
+        $price->delete();
+
+        // Redirect to a view or route after successfully updating the product
+        return redirect("produtos/{$product}")->with('success', 'Price created successfully');
         //
     }
 }

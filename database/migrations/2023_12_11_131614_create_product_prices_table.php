@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2); // Ajuste conforme necessário
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

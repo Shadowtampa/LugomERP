@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// PSR do Luis: os métodos API deverão ser obrigatoriamente nomeados com api.<nome_do_recurso>
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
