@@ -10,4 +10,11 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = ['title', 'image_url', 'description', 'category'];
+
+    public function stores()
+    {
+        return $this->belongsToMany(Store::class);
+    }
+
 }
+

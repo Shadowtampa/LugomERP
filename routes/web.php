@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
@@ -43,12 +44,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('users', [UserController::class, 'index'])->name('users.index');
 
 
-Route::prefix('produtos')->name('produtos.')->group(function () {
-    Route::get('', [ProductController::class, 'index'])->name('index');
-    Route::get('/create', [ProductController::class, 'create'])->name('create');
-    Route::get('/{product_id}', [ProductController::class, 'edit'])->name('edit');
-    Route::put('/{product_id}', [ProductController::class, 'update'])->name('update');
-    Route::delete('/{product_id}', [ProductController::class, 'destroy'])->name('destroy');
+Route::prefix('produtos')->name('produtos.')->controller(ProductController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::get('/{product_id}','edit')->name('edit');
+    Route::put('/{product_id}', 'update')->name('update');
+    Route::delete('/{product_id}', 'destroy')->name('destroy');
+});
+
+Route::prefix('promocoes')->name('promocoes.')->controller(SaleController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::get('/{product_id}','edit')->name('edit');
+    Route::put('/{product_id}', 'update')->name('update');
+    Route::delete('/{product_id}', 'destroy')->name('destroy');
 });
 
 Route::get('/produtos/{product_id}/create', [ProductPriceController::class, 'create'])->name('productprices.create');

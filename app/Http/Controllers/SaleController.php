@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\SaleDataTable;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\Sale;
@@ -11,9 +12,9 @@ class SaleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(SaleDataTable $dataTable)
     {
-        //
+        return $dataTable->render('promocoes.index');
     }
 
     /**
@@ -21,7 +22,10 @@ class SaleController extends Controller
      */
     public function create()
     {
-        //
+        $products = [];
+
+        return view('promocoes.create')->with(compact('products'));
+
     }
 
     /**

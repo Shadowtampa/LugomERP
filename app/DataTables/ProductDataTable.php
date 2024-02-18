@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Product;
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -30,7 +31,12 @@ class ProductDataTable extends DataTable
 
     public function query(Product $model): QueryBuilder
     {
-        return $model->newQuery();
+        $storeId = session()->get('store', Store::first()->id);
+
+        return $model->newQuery()
+            ->whereHas('stores', function ($query) use ($storeId) {
+                $query->where('stores.id',  $storeId); // 1 é o ID da loja desejada
+            });
     }
 
     public function html(): HtmlBuilder
