@@ -62,7 +62,7 @@ class ProductController extends Controller
      
              return DataTables::of($query)
                  ->addColumn('isSale', function ($productPrice) {
-                     return $productPrice->isSale ? 'Verdadeiro' : 'Falso';
+                     return $productPrice->isSale() ? 'Verdadeiro' : 'Falso';
                  })
                  ->addColumn('edit', function ($productPrice) {
                      return '<a href="' . route('productprices.edit', $productPrice->id) . '" class="btn btn-warning btn-sm">Editar</a>';
@@ -84,6 +84,7 @@ class ProductController extends Controller
              ->columns([
                  ['data' => 'id', 'name' => 'id', 'title' => 'ID'],
                  ['data' => 'price', 'name' => 'price', 'title' => 'Preço'],
+                 ['data' => 'isSale', 'name' => 'isSale', 'title' => 'Está em promoção'],
                  ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Criado em'],
                  ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Atualizado em'],
                  ['data' => 'edit', 'name' => 'edit', 'title' => 'Editar', 'orderable' => false, 'searchable' => false],

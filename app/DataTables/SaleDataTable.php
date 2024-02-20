@@ -22,9 +22,20 @@ class SaleDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'sale.action')
-            ->setRowId('id');
+            ->addColumn('actions', function (Sale $sale) {
+                return '
+                <a href="' . route('promocoes.edit', $sale->id) . '" class="btn btn-warning btn-sm">Edit</a>
+                <form action="' . route('apisale.destroy', $sale->id) . '" method="POST" style="display:inline">
+                    ' . csrf_field() . '
+                    ' . method_field('DELETE') . '
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Excluir a promoção: ' . $sale->title . ' ?\')">Delete</button>
+                </form>
+            ';
+            })
+            ->setRowId('id')
+            ->rawColumns(['actions']);
     }
+
 
     /**
      * Get the query source of dataTable.
@@ -40,21 +51,21 @@ class SaleDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('sale-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('add'),
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('sale-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('add'),
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ]);
     }
 
     /**
@@ -63,15 +74,17 @@ class SaleDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
             Column::make('id'),
-            Column::make('add your columns'),
+            Column::make('model'),
+            Column::make('description'),
             Column::make('created_at'),
             Column::make('updated_at'),
+            Column::computed('actions')
+            ->title('Actions')
+            ->exportable(false)
+            ->printable(false)
+            ->width(120)
+            ->addClass('text-center'),
         ];
     }
 

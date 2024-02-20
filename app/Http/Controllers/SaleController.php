@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateSaleRequest;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\Sale;
+use App\Models\SaleDetail;
 
 class SaleController extends Controller
 {
@@ -45,21 +46,32 @@ class SaleController extends Controller
     {
         $requestData = $request->all();
 
+        $sale = Sale::create([
+            'description' =>$requestData['description'],
+            'model' => $requestData['model'],
+        ]);
+
+        $sale_detail = SaleDetail::create([
+            'sale_id' => $sale->id, 
+            'trigger' => $requestData['trigger'],
+            'negative' => $requestData['negative']
+        ]);
+
+
         // CASO O MODEL DA PROMOÇÃO SEJA PP, ELE VAI criar uma instância de product_price, criará uma instância de promoção que conterá: ['product', 'price_product', 'description', 'model', 'trigger', 'negative']
         if ($requestData['model']  === "PP") {
-            ProductPrice::create([
-                'product_id' => intval($requestData['product_id']),
-                'isSale' => true,
-                'price' => $requestData['price_product'],
-            ]);
+            $product_price = ProductPrice::create(
+                [
+                    'product_id' => $requestData['product_id'],
+                    'price' => $requestData['price_product']
+                ]);
 
-            Sale::create($request->all());
+            $sale_detail->product_price_id = $product_price->id;
         }
 
 
         // CASO O MODEL DA PROMOÇÃO SEJA PXLY, ELE SÓ VAI CRIAR UMA INSTÂNCIA DE SALE
         if ($requestData['model']  === "PXLY") {
-            Sale::create($request->all());
         }
 
         return redirect()->route('promocoes.index')->with('success', 'Sale created successfully');
