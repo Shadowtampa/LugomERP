@@ -24,13 +24,6 @@
                             pattern="^\d+(\.\d{1,2})?$" title="Informe um valor em dinheiro válido (ex: 123.45)" required>
                         <small class="text-gray-500">Informe um valor em dinheiro válido (ex: 123.45)</small>
                     </div>
-                    
-                    <div class="mb-4">
-                        <label for="isSale" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                            Está em promoção:
-                        </label>
-                        <input type="checkbox" name="isSale" id="isSale" class="border rounded-md py-2 px-3">
-                    </div>
 
                     <div class="mt-4">
                         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">

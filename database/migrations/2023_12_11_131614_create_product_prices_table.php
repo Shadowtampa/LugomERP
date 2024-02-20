@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('product_prices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->boolean('isSale');
             $table->decimal('price', 10, 2); // Ajuste conforme necessário
             $table->timestamps();
 

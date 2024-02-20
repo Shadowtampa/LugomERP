@@ -32,14 +32,9 @@ class ProductPriceController extends Controller
     {
         $requestData = $request->all();
 
-        // Verifica se "isSale" está presente no array, se não estiver, define como false
-        $isSale = isset($requestData['isSale']) ? true : false;
-
-
         // Cria o modelo ProductPrice com os dados do request
         $productPrice = ProductPrice::create([
             'product_id' => intval($requestData['page_id']),
-            'isSale' => $isSale,
             'price' => $requestData['price'],
         ]);
 
@@ -77,11 +72,8 @@ class ProductPriceController extends Controller
         // Encontrar o produto pelo ID
         $price = ProductPrice::findOrFail($id);
     
-        $isSale = isset($request['isSale']) ? true : false;
-    
         // Atualizar apenas os campos específicos permitidos no modelo
         $price->update([
-            'isSale' => $isSale,
             'price' => $request['price'],
         ]);
     
@@ -89,9 +81,6 @@ class ProductPriceController extends Controller
 
     }
     
-    
-
-
     /**
      * Remove the specified resource from storage.
      */
@@ -108,5 +97,9 @@ class ProductPriceController extends Controller
         // Redirect to a view or route after successfully updating the product
         return redirect("produtos/{$product}")->with('success', 'Price created successfully');
         //
+    }
+
+    public function createSalePriceFromSaleController(){
+
     }
 }
