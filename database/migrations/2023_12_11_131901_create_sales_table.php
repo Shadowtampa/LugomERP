@@ -13,16 +13,10 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('price_product_id');
             $table->enum('model', ['PP', 'PXLY']);
-            $table->integer('trigger');
-            $table->integer('negative');
+            $table->string("description");
             $table->timestamps();
-
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('price_product_id')->references('id')->on('product_prices');
-        });
+         });
     }
 
     /**
