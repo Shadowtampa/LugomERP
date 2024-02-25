@@ -19,7 +19,6 @@ class ProductPriceFactory extends Factory
 
         return [
             'product_id' => $product->id,
-            'isSale' => $this->faker->boolean,
             'price' => $this->faker->randomFloat(2, 10, 1000),
         ];
     }
