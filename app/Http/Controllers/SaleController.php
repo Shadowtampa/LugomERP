@@ -52,9 +52,7 @@ class SaleController extends Controller
         ]);
 
         $sale_detail = SaleDetail::create([
-            'sale_id' => $sale->id, 
-            'trigger' => $requestData['trigger'],
-            'negative' => $requestData['negative']
+            'sale_id' => $sale->id
         ]);
 
 
@@ -67,11 +65,19 @@ class SaleController extends Controller
                 ]);
 
             $sale_detail->product_price_id = $product_price->id;
+            $sale_detail->save();
         }
 
 
         // CASO O MODEL DA PROMOÇÃO SEJA PXLY, ELE SÓ VAI CRIAR UMA INSTÂNCIA DE SALE
         if ($requestData['model']  === "PXLY") {
+
+            $sale_detail->trigger_id = $requestData['trigger_id'];
+            $sale_detail->trigger = $requestData['trigger'];
+
+            $sale_detail->negative_id = $requestData['negative_id'];
+            $sale_detail->negative = $requestData['negative'];
+            $sale_detail->save();
         }
 
         return redirect()->route('promocoes.index')->with('success', 'Sale created successfully');

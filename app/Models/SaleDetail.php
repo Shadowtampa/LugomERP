@@ -9,7 +9,7 @@ class SaleDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['sale_id', 'trigger', 'negative', 'product_price_id'];
+    protected $fillable = ['sale_id', 'trigger', 'negative', 'trigger_id', 'negative_id','product_price_id'];
 
     public function sale()
     {
