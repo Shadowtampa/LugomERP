@@ -96,9 +96,13 @@ class SaleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sale $sale)
+    public function edit($id)
     {
-        //
+
+        // Consulta para obter apenas os produtos associados à loja com ID igual a $storeId
+        $sale = Sale::whereId($id)->first();
+
+        return view('promocoes.edit')->with(compact('sale'));
     }
 
     /**
