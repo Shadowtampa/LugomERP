@@ -25,6 +25,10 @@
                         {{ __('Promoções') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('promocoes')">
+                        {{ __('Clientes') }}
+                    </x-nav-link>
+
                 </div>
             </div>
 

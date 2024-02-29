@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VendaController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
@@ -63,6 +65,21 @@ Route::prefix('promocoes')->name('promocoes.')->controller(SaleController::class
 Route::get('/produtos/{product_id}/create', [ProductPriceController::class, 'create'])->name('productprices.create');
 Route::get('/priceproduct{priceproduct_id}', [ProductPriceController::class, 'edit'])->name('productprices.edit');
 
+Route::prefix('clientes')->name('clientes.')->controller(ClientController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::get('/{product_id}','edit')->name('edit');
+    Route::put('/{product_id}', 'update')->name('update');
+    Route::delete('/{product_id}', 'destroy')->name('destroy');
+});
+
+Route::prefix('vendas')->name('vendas.')->controller(VendaController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::get('/{product_id}','edit')->name('edit');
+    Route::put('/{product_id}', 'update')->name('update');
+    Route::delete('/{product_id}', 'destroy')->name('destroy');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
