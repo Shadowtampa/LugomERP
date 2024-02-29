@@ -10,4 +10,9 @@ class Sale extends Model
     use HasFactory;
 
     protected $fillable = ['description', 'model'];
+
+    public function saleDetail()
+    {
+        return $this->hasOne(SaleDetail::class);
+    }
 }
