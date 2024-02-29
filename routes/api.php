@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\SaleController;
@@ -28,3 +29,5 @@ Route::resource('produto', ProductController::class);
 Route::resource('priceproduct', ProductPriceController::class);
 
 Route::resource('apisale', SaleController::class);
+
+Route::resource('apiclients', ClientController::class);

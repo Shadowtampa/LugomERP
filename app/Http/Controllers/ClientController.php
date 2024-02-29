@@ -6,6 +6,7 @@ use App\DataTables\ClientDataTable;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
+use App\Models\Store;
 
 class ClientController extends Controller
 {
@@ -22,7 +23,10 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+
+        $stores = Store::all();
+
+        return view('clients.create', compact('stores'));
     }
 
     /**
@@ -30,7 +34,14 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        //
+
+        $client = Client::create($request->all());
+
+        $client->stores()->attach($request->input('stores'));
+
+        // Redirect to a view or route after successfully storing the product
+        return redirect()->route('clientes.index')->with('success', 'Client created successfully');
+    
     }
 
     /**
