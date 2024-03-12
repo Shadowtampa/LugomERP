@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('store_id')->references('id')->on('stores');
             
             $table->unsignedBigInteger('client_id')->nullable();
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('client_id')->references('id')->on('clients')->nullable();
             
             $table->decimal('final_price', 10, 2);
             $table->string('payment_method')->nullable();

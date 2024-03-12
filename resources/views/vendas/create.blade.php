@@ -33,28 +33,31 @@
                             Loja:
                         </label>
                         <select name="store_id" id="store_id" class="w-full border rounded-md py-2 px-3" required>
-                            @foreach($stores as $store)
+                            @foreach ($stores as $store)
                                 <option value="{{ $store->id }}" {{ $store->id == $userId ? 'selected' : '' }}>
                                     {{ $store->title }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
-                    
+
                     <div class="mb-4">
                         <label for="product_select" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
                             Selecione um Produto:
                         </label>
-                        <select name="product_select" id="product_select" class="w-full border rounded-md py-2 px-3" onchange="addProductField()">
+                        <select name="product_select" id="product_select" class="w-full border rounded-md py-2 px-3"
+                            onchange="addProductField()">
                             <option value="" disabled selected>Escolha um produto</option>
-                            @foreach($products as $productId => $productName)
+                            @foreach ($products as $productId => $productName)
                                 <option value="{{ $productId }}">{{ $productName }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div id="productsContainer">
-                        <table class="w-full border border-collapse rounded-md text-gray-700 dark:text-gray-300 font-bold mb-2 divide-y divide-gray-200" style="border-radius: none">
+                        <table
+                            class="w-full border border-collapse rounded-md text-gray-700 dark:text-gray-300 font-bold mb-2 divide-y divide-gray-200"
+                            style="border-radius: none">
                             <thead>
                                 <tr>
                                     <th class="border p-2 text-center">ID</th>
@@ -75,7 +78,7 @@
                         </label>
                         <span id="total_price" class="text-gray-700 dark:text-gray-300 font-bold text-2xl mb-2">0.00</span>
                     </div>
-                 
+
 
                     <div class="mt-4">
                         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">
@@ -88,7 +91,6 @@
     </div>
 
     <script>
-
         const addedProducts = [];
 
         const promotions = @json($promotions);
@@ -97,7 +99,8 @@
 
         function addProductField() {
             const productId = document.getElementById('product_select').value;
-            const productName = document.getElementById('product_select').options[document.getElementById('product_select').selectedIndex].text;
+            const productName = document.getElementById('product_select').options[document.getElementById('product_select')
+                .selectedIndex].text;
             const quantity = prompt(`Digite a quantidade para o Produto ${productName}:`);
 
             if (quantity !== null && quantity.trim() !== '') {
@@ -106,7 +109,8 @@
 
                 if (existingProductIndex !== -1) {
                     // Se o produto já estiver na lista, atualize a quantidade
-                    addedProducts[existingProductIndex].quantity = parseInt(addedProducts[existingProductIndex].quantity) + parseInt(quantity);
+                    addedProducts[existingProductIndex].quantity = parseInt(addedProducts[existingProductIndex].quantity) +
+                        parseInt(quantity);
                     updateTableRow(existingProductIndex, addedProducts[existingProductIndex].quantity);
                     updateTotalPrice(); // Adicione esta função para calcular e exibir o preço total
                     // console.log(addedProducts);
@@ -152,45 +156,52 @@
             const rows = document.getElementById('productTableBody').getElementsByTagName('tr');
             let totalPrice = 0;
 
-            // percorrer toda a tabela de produtos para fazer a adição do valor
-            for (let i = 0; i < rows.length; i++) {
-                const productId = rows[i].cells[0].innerText;
-                let quantity = parseFloat(rows[i].cells[2].innerText);
+            for (const row of rows) {
+                const productId = row.cells[0].innerText;
+                let quantity = parseFloat(row.cells[2].innerText);
+                const price = parseFloat(row.cells[3].innerText.replace(/[^\d.,]/g, '').replace(',', '.'));
 
-                const priceText = rows[i].cells[3].innerText;
-                const price = parseFloat(priceText.replace(/[^\d.,]/g, '').replace(',', '.'));
+                for (const promotion of promotions) {
+                    const {
+                        trigger_id,
+                        negative_id,
+                        trigger,
+                        negative
+                    } = promotion.sale_detail;
 
+                    if ((productId == trigger_id || productId == negative_id) &&
+                        (trigger_id == negative_id ? (quantity >= trigger && quantity - trigger > 0) : (negative_id ==
+                            productId))) {
 
+                        if (trigger_id == negative_id) {
+                            const _quantity = quantity / negative;
+                            quantity -= Math.floor(_quantity * (negative - trigger));
+                        } else {
+                            const negative_diminutor = addedProducts.find(objeto => objeto.id == trigger_id);
 
-
-                for (let j = 0; j < promotions.length; j++) {
-                    const promotion = promotions[j]["sale_detail"];
-
-                    if (productId == promotion.trigger_id && quantity >= promotion["trigger"] && (quantity - promotion["trigger"] > 0)) {
-                        console.log("PROMOÇÃO");
-                        if (promotion.trigger_id == promotion.negative_id) {
-                            console.log(`COMPRE ${promotion.trigger} LEVE ${promotion.negative}`);
-                            _quantity = quantity/(promotion.negative);
-                            quantity -= Math.floor(_quantity * (promotion.negative - promotion.trigger))
+                            if (negative_diminutor && negative_diminutor.quantity >= trigger) {
+                                const numeroPromos = Math.floor(negative_diminutor.quantity / trigger);
+                                quantity -= numeroPromos * negative;
+                            }
                         }
-                        // Adicione aqui o código adicional que deseja executar quando encontrar a promoção
                     }
                 }
 
-
-
                 console.log(quantity + "   " + price);
-                totalPrice += quantity * price;
+                quantity > -1 && (totalPrice += quantity * price);
             }
 
             // Atualizar o campo de valor total no formulário
             document.getElementById('total_price').innerText = formatCurrency(totalPrice);
             document.getElementById('_total_price').value = JSON.stringify(totalPrice);
-
         }
 
+
         function formatCurrency(value) {
-            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
         }
 
         // Adicione esta função para preparar os dados antes do envio do formulário
@@ -200,7 +211,5 @@
             document.getElementById('products_data').value = JSON.stringify(addedProducts);
             return true; // Continue com a submissão normal do formulário
         }
-
     </script>
 @endsection
-
