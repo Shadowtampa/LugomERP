@@ -16,13 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores');
             
-            $table->unsignedBigInteger('client_id');
+            $table->unsignedBigInteger('client_id')->nullable();
             $table->foreign('client_id')->references('id')->on('clients');
             
             $table->decimal('final_price', 10, 2);
-            $table->string('payment_method');
-            $table->string('status');
-            $table->string('delivery_address');
+            $table->string('payment_method')->nullable();
+            $table->string('status')->nullable();
+            $table->string('delivery_address')->nullable();
             $table->timestamps();
         });
     }

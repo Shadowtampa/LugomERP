@@ -24,6 +24,11 @@ class ProductPrice extends Model
             return false;
         }
     }
+
+    public function sale()
+    {
+        return $this->hasOne(SaleDetail::class);
+    }
     
 
 }

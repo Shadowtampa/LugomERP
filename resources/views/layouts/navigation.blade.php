@@ -29,6 +29,10 @@
                         {{ __('Clientes') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('vendas.index')" :active="request()->routeIs('promocoes')">
+                        {{ __('Vendas') }}
+                    </x-nav-link>
+
                 </div>
             </div>
 

@@ -76,7 +76,7 @@ Route::prefix('clientes')->name('clientes.')->controller(ClientController::class
 Route::prefix('vendas')->name('vendas.')->controller(VendaController::class)->group(function () {
     Route::get('', 'index')->name('index');
     Route::get('/create', 'create')->name('create');
-    Route::get('/{product_id}','edit')->name('edit');
+    Route::get('/{venda_id}','show')->name('show');
     Route::put('/{product_id}', 'update')->name('update');
     Route::delete('/{product_id}', 'destroy')->name('destroy');
 });

@@ -15,4 +15,10 @@ class Sale extends Model
     {
         return $this->hasOne(SaleDetail::class);
     }
+
+    public function stores()
+    {
+        return $this->belongsToMany(Store::class);
+
+    }
 }

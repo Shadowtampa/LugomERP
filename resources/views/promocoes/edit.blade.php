@@ -32,11 +32,14 @@
                             </label>
                             <select name="product_id" id="product_id" class="PP_SEL w-full border rounded-md py-2 px-3" required>
                                 @foreach ($products as $productId => $productName)
-                                <option value="{{ $productId }}" @if ($productId == $sale->saleDetail->productPrice->product_id) selected @endif>{{ $productName }}</option>
+                                    @php
+                                        $selected = ($sale->saleDetail && $sale->saleDetail->productPrice && $productId == $sale->saleDetail->productPrice->product_id) ? 'selected' : '';
+                                    @endphp
+                                    <option value="{{ $productId }}" {{ $selected }}>{{ $productName }}</option>
                                 @endforeach
                             </select>
                         </div>
-
+                        
                         <div class="mb-4 PXLY">
                             <label for="trigger" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
                                 Trigger:
@@ -87,14 +90,16 @@
                                 required
                                 >{{ $sale->description }}</textarea>
                         </div>
-
+                        
                         <div class="mb-4 PP">
                             <label for="price_product" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
                                 Preço do Produto:
                             </label>
                             <input type="number" step="0.01" name="price_product" id="price_product"
-                                class="PP_SEL w-full border rounded-md py-2 px-3" value= {{$sale->saleDetail->productPrice->price}}>
+                                class="PP_SEL w-full border rounded-md py-2 px-3" 
+                                value="{{ $sale->saleDetail && $sale->saleDetail->productPrice ? $sale->saleDetail->productPrice->price : '' }}">
                         </div>
+                        
 
                         <div class="mt-4">
                             <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">

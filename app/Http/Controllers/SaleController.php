@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductPrice;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use Illuminate\Support\Facades\Session;
 
 class SaleController extends Controller
 {
@@ -36,7 +37,6 @@ class SaleController extends Controller
 
 
         return view('promocoes.create')->with(compact('products'));
-
     }
 
     /**
@@ -81,6 +81,10 @@ class SaleController extends Controller
             $sale_detail->save();
         }
 
+
+        // Attach aceita um array de IDs
+        $sale->stores()->attach($requestData['store_id']);
+
         return redirect()->route('promocoes.index')->with('success', 'Sale created successfully');
     }
 
@@ -98,7 +102,7 @@ class SaleController extends Controller
     public function edit($id)
     {
 
-        
+
         // Obtenha o valor da sessão "store"
         $storeId = session("store");
 
@@ -115,7 +119,7 @@ class SaleController extends Controller
 
 
 
-        return view('promocoes.edit')->with(compact('sale' , 'products'));
+        return view('promocoes.edit')->with(compact('sale', 'products'));
     }
 
     /**
@@ -132,7 +136,7 @@ class SaleController extends Controller
             'description' => $requestData['description'],
             'model' => $requestData['model'],
         ]);
-        
+
         $sale->save();
 
         $sale_detail = $sale->saleDetail;
@@ -176,6 +180,5 @@ class SaleController extends Controller
 
         // Redirect to a view or route after successfully updating the product
         return redirect()->route('promocoes.index')->with('success', 'Sale deleted successfully');
-
     }
 }

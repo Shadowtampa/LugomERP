@@ -14,6 +14,9 @@
                     <form action="{{ route('apisale.store') }}" method="POST">
                         @csrf
 
+                        <input type="hidden" name="store_id" value="{{ session('store') }}">
+
+
                         <div class="mb-4">
                             <label for="model" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
                                 Modelo:

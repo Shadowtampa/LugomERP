@@ -47,4 +47,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Store::class);
     }
+
+    public function sales()
+    {
+        $storeIds = $this->stores()->pluck('stores.id')->toArray();
+
+        return Sale::whereHas('stores', function ($query) use ($storeIds) {
+            $query->whereIn('stores.id', $storeIds);
+        })->get();
+    }
 }

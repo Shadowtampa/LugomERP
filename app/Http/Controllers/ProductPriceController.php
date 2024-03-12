@@ -40,16 +40,33 @@ class ProductPriceController extends Controller
 
         // Redirect to a view or route after successfully storing the product
         return redirect("produtos/{$requestData['page_id']}")->with('success', 'Price created successfully');
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ProductPrice $productPrice)
+    public function show($id)
     {
-        //
+        $productPrice = ProductPrice::where('product_id', $id)
+            ->whereHas('sale')
+            ->with(['sale' => function ($query) {
+                $query->orderByDesc('created_at')->take(1);
+            }])
+            ->orderBy('created_at')
+            ->first();
+
+            if (!$productPrice) {
+                $productPrice = ProductPrice::where('product_id', $id)->orderBy('created_at')->first();
+            }
+        
+            if ($productPrice) {
+                return response()->json(['id' => $productPrice->product_id, 'price' => $productPrice->price]);
+            }
+        return response()->json(['message' => 'Nenhum preço encontrado.'], 404);
     }
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -71,16 +88,15 @@ class ProductPriceController extends Controller
     {
         // Encontrar o produto pelo ID
         $price = ProductPrice::findOrFail($id);
-    
+
         // Atualizar apenas os campos específicos permitidos no modelo
         $price->update([
             'price' => $request['price'],
         ]);
-    
-        return redirect("produtos/{$price->product_id}")->with('success', 'Price created successfully');
 
+        return redirect("produtos/{$price->product_id}")->with('success', 'Price created successfully');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */
@@ -99,7 +115,7 @@ class ProductPriceController extends Controller
         //
     }
 
-    public function createSalePriceFromSaleController(){
-
+    public function createSalePriceFromSaleController()
+    {
     }
 }

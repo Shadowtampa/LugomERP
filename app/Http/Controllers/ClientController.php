@@ -41,7 +41,6 @@ class ClientController extends Controller
 
         // Redirect to a view or route after successfully storing the product
         return redirect()->route('clientes.index')->with('success', 'Client created successfully');
-    
     }
 
     /**
@@ -55,24 +54,43 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Client $client)
+    public function edit($id)
     {
-        //
+
+        $client = Client::whereId($id)->first();
+
+        $stores = Store::all();
+        // Retorna a view com os dados necessários
+        return view('clients.edit', compact('client', 'stores'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateClientRequest $request, Client $client)
+    public function update(UpdateClientRequest $request, $id)
     {
-        //
+        // Find the product by ID
+        $client = Client::findOrFail($id);
+
+        // Update the product with the validated data
+        $client->update($request->all());
+
+        // Redirect to a view or route after successfully updating the product
+        return redirect()->route('clientes.index', $client->id)->with('success', 'cliente updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Client $client)
+    public function destroy($id)
     {
-        //
+        $cliente = Client::findOrFail($id);
+
+        // Update the product with the validated data
+        $cliente->delete();
+
+        // Redirect to a view or route after successfully updating the product
+        return redirect()->route('clientes.index')->with('success', 'Client updated successfully');
+
     }
 }
