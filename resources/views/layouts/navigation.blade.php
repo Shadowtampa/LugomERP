@@ -13,24 +13,28 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <!-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
-                    </x-nav-link>
+                    </x-nav-link> -->
 
-                    <x-nav-link :href="route('produtos.index')" :active="request()->routeIs('produtos')">
+                    <x-nav-link :href="route('produtos.index')" :active="request()->routeIs('produtos.index')">
                         {{ __('Produtos') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('promocoes.index')" :active="request()->routeIs('promocoes')">
+                    <x-nav-link :href="route('promocoes.index')" :active="request()->routeIs('promocoes.index')">
                         {{ __('Promoções') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('promocoes')">
+                    <x-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.index')">
                         {{ __('Clientes') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('vendas.index')" :active="request()->routeIs('promocoes')">
+                    <x-nav-link :href="route('vendas.index')" :active="request()->routeIs('vendas.index')">
                         {{ __('Vendas') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('lojas.index')" :active="request()->routeIs('lojas.index')">
+                        {{ __('Lojas') }}
                     </x-nav-link>
 
                 </div>

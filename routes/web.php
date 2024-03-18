@@ -5,9 +5,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendaController;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\DataTables;
 use Yajra\DataTables\Html\Builder;
@@ -79,6 +81,15 @@ Route::prefix('vendas')->name('vendas.')->controller(VendaController::class)->gr
     Route::get('/{venda_id}','show')->name('show');
     Route::put('/{product_id}', 'update')->name('update');
     Route::delete('/{product_id}', 'destroy')->name('destroy');
+});
+
+Route::prefix('lojas')->name('lojas.')->controller(StoreController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::get('/{product_id}','edit')->name('edit');
+    Route::put('/{product_id}', 'update')->name('update');
+    Route::delete('/{product_id}', 'destroy')->name('destroy');
+    Route::post('/{product_id}', 'sethome')->name('sethome');
 });
 
 Route::middleware('auth')->group(function () {

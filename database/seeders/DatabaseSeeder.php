@@ -27,12 +27,12 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('senha123'),
         ]);
 
-        // Crie a loja
         Store::factory()->create([
             'id' => 1,
-            'title' => 'Loja 1',
+            'alias' => 'DevShirts',
+            'official_name' => 'DevShirts',
         ]);
-
+        
         // Associe o usuário à loja
         User::find(1)->stores()->attach(1);
 
