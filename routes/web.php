@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendaController;
 use App\Models\Product;
@@ -90,6 +91,14 @@ Route::prefix('lojas')->name('lojas.')->controller(StoreController::class)->grou
     Route::put('/{product_id}', 'update')->name('update');
     Route::delete('/{product_id}', 'destroy')->name('destroy');
     Route::post('/{product_id}', 'sethome')->name('sethome');
+});
+
+Route::prefix('fornecedores')->name('fornecedores.')->controller(SupplierController::class)->group(function () {
+    Route::get('', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::get('/{product_id}','edit')->name('edit');
+    Route::put('/{product_id}', 'update')->name('update');
+    Route::delete('/{product_id}', 'destroy')->name('destroy');
 });
 
 Route::middleware('auth')->group(function () {

@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\VendaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,3 +38,5 @@ Route::resource('apiclients', ClientController::class);
 Route::resource('apivenda', VendaController::class);
 
 Route::resource('apistore', StoreController::class);
+
+Route::resource('apisupplier', SupplierController::class);
