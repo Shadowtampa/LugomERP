@@ -20,7 +20,7 @@ class ProductController extends Controller
      */
     public function index(ProductDataTable $dataTable)
     {
-        return $dataTable->render('produtos.index');
+        return $dataTable->render('products.index');
     }
 
     /**
@@ -54,12 +54,12 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      */
 
- 
+
      public function edit($id, Builder $builder)
      {
          if (request()->ajax()) {
              $query = ProductPrice::query()->where('product_id', $id);
-     
+
              return DataTables::of($query)
                  ->addColumn('isSale', function ($productPrice) {
                      return $productPrice->isSale() ? 'Verdadeiro' : 'Falso';
@@ -77,9 +77,9 @@ class ProductController extends Controller
                  ->rawColumns(['edit', 'delete'])
                  ->toJson();
          }
-     
+
          $product = Product::findOrFail($id);
-     
+
          $html = $builder
              ->columns([
                  ['data' => 'id', 'name' => 'id', 'title' => 'ID'],
@@ -93,11 +93,11 @@ class ProductController extends Controller
              ->parameters([
                  'buttons' => ['export', 'add'],
              ]);
-     
+
          // Retorna a view com os dados necessários
          return view('produtos.edit', compact('product', 'html'));
      }
-     
+
 
     /**
      * Update the specified resource in storage.

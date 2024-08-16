@@ -53,18 +53,13 @@ REDIS_PORT=6379
 
 Suba os containers do projeto
 ```sh
-docker compose up -d
-```
-
-Ligue a ferramenta de tooling (vite)
-```sh
-npm run dev
+docker-compose up -d
 ```
 
 
 Acessar o container
 ```sh
-docker compose exec app bash
+docker-compose exec app bash
 ```
 
 

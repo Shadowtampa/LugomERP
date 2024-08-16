@@ -21,18 +21,18 @@ class DatabaseSeeder extends Seeder
         Product::factory(10)->create();
 
         // Crie o usuário
-        User::factory()->create([
-            "name" => "Luis Gomes",
-            'email' => 'luis@gmail.com',
-            'password' => bcrypt('senha123'),
-        ]);
+        // User::factory()->create([
+        //     "name" => "Luis Gomes",
+        //     'email' => 'luis@gmail.com',
+        //     'password' => bcrypt('senha123'),
+        // ]);
 
         Store::factory()->create([
             'id' => 1,
             'alias' => 'DevShirts',
             'official_name' => 'DevShirts',
         ]);
-        
+
         // Associe o usuário à loja
         User::find(1)->stores()->attach(1);
 
@@ -43,6 +43,6 @@ class DatabaseSeeder extends Seeder
         foreach ($products as $product) {
             $product->stores()->attach(1);
         }
-        
+
     }
 }
