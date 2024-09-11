@@ -10,6 +10,8 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Models\ProductPrice;
 use DataTables;
+use Illuminate\Database\Eloquent\Casts\Json;
+use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Html\Builder;
 
 
@@ -55,48 +57,48 @@ class ProductController extends Controller
      */
 
 
-     public function edit($id, Builder $builder)
-     {
-         if (request()->ajax()) {
-             $query = ProductPrice::query()->where('product_id', $id);
+    public function edit($id, Builder $builder)
+    {
+        if (request()->ajax()) {
+            $query = ProductPrice::query()->where('product_id', $id);
 
-             return DataTables::of($query)
-                 ->addColumn('isSale', function ($productPrice) {
-                     return $productPrice->isSale() ? 'Verdadeiro' : 'Falso';
-                 })
-                 ->addColumn('edit', function ($productPrice) {
-                     return '<a href="' . route('productprices.edit', $productPrice->id) . '" class="btn btn-warning btn-sm">Editar</a>';
-                 })
-                 ->addColumn('delete', function ($productPrice) {
-                     return '<form action="' . route('priceproduct.destroy', $productPrice->id) . '" method="POST" style="display:inline">' .
-                         csrf_field() .
-                         method_field('DELETE') .
-                         '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Excluir o produto: ' . $productPrice->title . ' ?\')">Deletar</button>' .
-                         '</form>';
-                 })
-                 ->rawColumns(['edit', 'delete'])
-                 ->toJson();
-         }
+            return DataTables::of($query)
+                ->addColumn('isSale', function ($productPrice) {
+                    return $productPrice->isSale() ? 'Verdadeiro' : 'Falso';
+                })
+                ->addColumn('edit', function ($productPrice) {
+                    return '<a href="' . route('productprices.edit', $productPrice->id) . '" class="btn btn-warning btn-sm">Editar</a>';
+                })
+                ->addColumn('delete', function ($productPrice) {
+                    return '<form action="' . route('priceproduct.destroy', $productPrice->id) . '" method="POST" style="display:inline">' .
+                        csrf_field() .
+                        method_field('DELETE') .
+                        '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Excluir o produto: ' . $productPrice->title . ' ?\')">Deletar</button>' .
+                        '</form>';
+                })
+                ->rawColumns(['edit', 'delete'])
+                ->toJson();
+        }
 
-         $product = Product::findOrFail($id);
+        $product = Product::findOrFail($id);
 
-         $html = $builder
-             ->columns([
-                 ['data' => 'id', 'name' => 'id', 'title' => 'ID'],
-                 ['data' => 'price', 'name' => 'price', 'title' => 'Preço'],
-                 ['data' => 'isSale', 'name' => 'isSale', 'title' => 'Está em promoção'],
-                 ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Criado em'],
-                 ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Atualizado em'],
-                 ['data' => 'edit', 'name' => 'edit', 'title' => 'Editar', 'orderable' => false, 'searchable' => false],
-                 ['data' => 'delete', 'name' => 'delete', 'title' => 'Deletar', 'orderable' => false, 'searchable' => false],
-             ])
-             ->parameters([
-                 'buttons' => ['export', 'add'],
-             ]);
+        $html = $builder
+            ->columns([
+                ['data' => 'id', 'name' => 'id', 'title' => 'ID'],
+                ['data' => 'price', 'name' => 'price', 'title' => 'Preço'],
+                ['data' => 'isSale', 'name' => 'isSale', 'title' => 'Está em promoção'],
+                ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Criado em'],
+                ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Atualizado em'],
+                ['data' => 'edit', 'name' => 'edit', 'title' => 'Editar', 'orderable' => false, 'searchable' => false],
+                ['data' => 'delete', 'name' => 'delete', 'title' => 'Deletar', 'orderable' => false, 'searchable' => false],
+            ])
+            ->parameters([
+                'buttons' => ['export', 'add'],
+            ]);
 
-         // Retorna a view com os dados necessários
-         return view('produtos.edit', compact('product', 'html'));
-     }
+        // Retorna a view com os dados necessários
+        return view('products.edit', compact('product', 'html'));
+    }
 
 
     /**
@@ -128,4 +130,102 @@ class ProductController extends Controller
         return redirect()->route('produtos.index')->with('success', 'Product updated successfully');
 
     }
+    /**
+     * @OA\Get(
+     *     path="/api/products/by-store/{store}",
+     *     summary="Obtém produtos associados a uma loja específica",
+     *     description="Busca produtos associados a uma loja específica e retorna uma lista formatada de produtos.",
+     *     tags={"Produtos"},
+     *     @OA\Parameter(
+     *         name="store",
+     *         in="path",
+     *         description="ID da loja para a qual os produtos devem ser buscados.",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de produtos associados à loja",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="store",
+     *                 type="integer",
+     *                 description="ID da loja para a qual os produtos foram buscados."
+     *             ),
+     *             @OA\Property(
+     *                 property="products",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="id",
+     *                         type="integer",
+     *                         description="ID do produto"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="title",
+     *                         type="string",
+     *                         description="Título do produto"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="price",
+     *                         type="string",
+     *                         description="Preço do produto"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="promotionalPrice",
+     *                         type="integer",
+     *                         description="Preço promocional do produto"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="image",
+     *                         type="string",
+     *                         description="URL da imagem do produto"
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de solicitação",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="error",
+     *                 type="string",
+     *                 description="Descrição do erro"
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function getProductsByStore(int $store): JsonResponse
+    {
+        // Busca os produtos associados à loja específica pelo relacionamento `stores`
+        $products = Product::whereHas('stores', function ($query) use ($store) {
+            $query->where('store_id', $store);
+        })->get();
+
+        // Mapeia os produtos para o formato desejado
+        $formattedProducts = $products->map(function ($product) {
+            return [
+                "id" => $product->id,
+                "title" => $product->title,
+                "price" => $product->price(), // Ajuste se o campo for diferente no model
+                "promotionalPrice" => 90, // Ajuste se o campo for diferente no model
+                "image" => $product->image_url, // Usando 'image_url' conforme o model
+            ];
+        });
+
+        // Retorna a resposta JSON
+        return response()->json([
+            'store' => $store,
+            'products' => $formattedProducts,
+        ]);
+    }
+
 }

@@ -1,0 +1,98 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Lugom ERP",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/products/by-store/{store}": {
+            "get": {
+                "tags": [
+                    "Produtos"
+                ],
+                "summary": "Obtém produtos associados a uma loja específica",
+                "description": "Busca produtos associados a uma loja específica e retorna uma lista formatada de produtos.",
+                "operationId": "fbc4e081bef79011c7bc1549760dba71",
+                "parameters": [
+                    {
+                        "name": "store",
+                        "in": "path",
+                        "description": "ID da loja para a qual os produtos devem ser buscados.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de produtos associados à loja",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "store": {
+                                            "description": "ID da loja para a qual os produtos foram buscados.",
+                                            "type": "integer"
+                                        },
+                                        "products": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ID do produto",
+                                                        "type": "integer"
+                                                    },
+                                                    "title": {
+                                                        "description": "Título do produto",
+                                                        "type": "string"
+                                                    },
+                                                    "price": {
+                                                        "description": "Preço do produto",
+                                                        "type": "string"
+                                                    },
+                                                    "promotionalPrice": {
+                                                        "description": "Preço promocional do produto",
+                                                        "type": "integer"
+                                                    },
+                                                    "image": {
+                                                        "description": "URL da imagem do produto",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de solicitação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Descrição do erro",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Produtos",
+            "description": "Produtos"
+        }
+    ]
+}

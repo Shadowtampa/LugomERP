@@ -27,13 +27,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::resource('apiclients', ClientController::class);
+
 Route::resource('produto', ProductController::class);
+
+Route::get('produto/getproductsbystore/{store}',action: [ProductController::class, 'getProductsByStore'])->name('product.getByStore');
+
 
 Route::resource('priceproduct', ProductPriceController::class);
 
-Route::resource('apisale', SaleController::class);
 
-Route::resource('apiclients', ClientController::class);
+
+Route::resource('apisale', SaleController::class);
 
 Route::resource('apivenda', VendaController::class);
 

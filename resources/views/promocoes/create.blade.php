@@ -22,8 +22,8 @@
                                 Modelo:
                             </label>
                             <select name="model" id="model" class="w-full border rounded-md py-2 px-3" required>
-                                <option value="PXLY">Pague X leve Y</option>
-                                <option value="PP">Preço promocional</option>
+                                <!-- <option value="PXLY">Pague X leve Y</option> -->
+                                <option value="PP" selected>Preço promocional</option>
                             </select>
                         </div>
 
@@ -38,45 +38,9 @@
                             </select>
                         </div>
 
-                        <div class="mb-4 PXLY">
-                            <label for="trigger" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                                Trigger:
-                            </label>
-                            <select name="trigger_id" id="trigger_id" class="PXLY_SEL w-full border rounded-md py-2 px-3" required>
-                                @foreach ($products as $triggerId => $triggerName)
-                                    <option value="{{ $triggerId }}">{{ $triggerName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-4 PXLY">
-                            <label for="trigger" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                                Gatilho:
-                            </label>
-                            <input type="number" name="trigger" id="trigger" class="PXLY_SEL w-full border rounded-md py-2 px-3">
-                        </div>
-
-                        <div class="mb-4 PXLY">
-                            <label for="negative" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                                Negative:
-                            </label>
-                            <select name="negative_id" id="negative_id" class="PXLY_SEL w-full border rounded-md py-2 px-3" required>
-                                @foreach ($products as $negativeId => $negativeName)
-                                    <option value="{{ $negativeId }}">{{ $negativeName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-4 PXLY">
-                            <label for="negative" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                                Negativo:
-                            </label>
-                            <input type="number " name="negative" id="negative" class="PXLY_SEL w-full border rounded-md py-2 px-3">
-                        </div>
-
                         <div class="mb-4">
                             <label for="description" class="block text-gray-700 dark:text-gray-300 font-bold mb-2">
-                                Descrição:
+                                Descrição (opcional):
                             </label>
                             <textarea name="description" id="description" class="w-full border rounded-md py-2 px-3" required></textarea>
                         </div>
@@ -98,36 +62,4 @@
                 </div>
             </div>
         </div>
-
-        @push('scripts')
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script>
-                $(document).ready(function() {
-
-                    $('.PP').hide();
-
-
-                    // Monitora a mudança no modelo
-                    $('#model').change(function() {
-                        // Mostra os campos correspondentes ao modelo selecionado
-                        if ($(this).val() === 'PP') {
-                            $('.PP').show();
-                            $('.PXLY').hide();
-
-                            $('.PP_SEL').prop('required', true);
-                            $('.PXLY_SEL').prop('required', false);
-
-                        } else if ($(this).val() === 'PXLY') {
-                            $('.PP').hide();
-                            $('.PXLY').show();
-                            
-                            $('.PP_SEL').prop('required', false);
-                            $('.PXLY_SEL').prop('required', true);
-
-
-                        }
-                    });
-                });
-            </script>
-        @endpush
     @endsection
