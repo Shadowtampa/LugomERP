@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Services\Auth\LoginService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\Response;
 
-class LoginController extends Controller
+class LogoutController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -30,20 +28,24 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(protected LoginService $loginService)
+    public function __construct()
     {
         // dd("here");
     }
 
-    public function __invoke(LoginRequest $request): JsonResponse 
+    public function __invoke(Request $request): JsonResponse
     {
-        return $this->loginService->authenticated($request);
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'Sessão encerrada',
+        ], Response::HTTP_OK);
     }
 }

@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Services\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Services\Auth\LoginService;
+use App\Models\User;
+use Hash;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-class LoginController extends Controller
+class LoginService extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -32,18 +33,27 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(protected LoginService $loginService)
+    public function authenticated(LoginRequest $request): JsonResponse
     {
-        // dd("here");
-    }
+        $user = User::where('email', $request->get('email'))->first();
 
-    public function __invoke(LoginRequest $request): JsonResponse 
+        if (!$user || !Hash::check($request->get('password'), $user->password)) {
+            
+            return response()->json([
+                'message' => 'Credenciais inválidas!',
+            ], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user_id' => $user->id
+        ]);
+    }
+    public function me(Request $request): User
     {
-        return $this->loginService->authenticated($request);
+        return $request->user();
     }
 }

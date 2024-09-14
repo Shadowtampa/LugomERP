@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Services\Auth\LoginService;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-class LoginController extends Controller
+class UserMeController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -42,8 +43,8 @@ class LoginController extends Controller
         // dd("here");
     }
 
-    public function __invoke(LoginRequest $request): JsonResponse 
+    public function __invoke(Request $request): User 
     {
-        return $this->loginService->authenticated($request);
+        return $this->loginService->me($request);
     }
 }

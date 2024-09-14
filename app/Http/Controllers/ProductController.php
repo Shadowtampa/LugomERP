@@ -130,6 +130,7 @@ class ProductController extends Controller
         return redirect()->route('produtos.index')->with('success', 'Product updated successfully');
 
     }
+
     /**
      * @OA\Get(
      *     path="/api/products/by-store/{store}",
@@ -203,29 +204,6 @@ class ProductController extends Controller
      *     )
      * )
      */
-    public function getProductsByStore(int $store): JsonResponse
-    {
-        // Busca os produtos associados à loja específica pelo relacionamento `stores`
-        $products = Product::whereHas('stores', function ($query) use ($store) {
-            $query->where('store_id', $store);
-        })->get();
 
-        // Mapeia os produtos para o formato desejado
-        $formattedProducts = $products->map(function ($product) {
-            return [
-                "id" => $product->id,
-                "title" => $product->title,
-                "price" => $product->price(), // Ajuste se o campo for diferente no model
-                "promotionalPrice" => 90, // Ajuste se o campo for diferente no model
-                "image" => $product->image_url, // Usando 'image_url' conforme o model
-            ];
-        });
-
-        // Retorna a resposta JSON
-        return response()->json([
-            'store' => $store,
-            'products' => $formattedProducts,
-        ]);
-    }
 
 }
