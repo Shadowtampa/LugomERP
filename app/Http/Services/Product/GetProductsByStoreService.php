@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 class GetProductsByStoreService extends Controller
 {
 
-    public function getProductsByStore(GetProductsByStoreRequest $request): JsonResponse
+    public function getProductsByStore(int $storeId): JsonResponse
     {
         // Busca os produtos associados à loja específica pelo relacionamento `stores`
-        $products = Product::whereHas('stores', function ($query) use ($request) {
-            $query->where('store_id', $request->get('store_id'));
+        $products = Product::whereHas('stores', function ($query) use ($storeId) {
+            $query->where('store_id', $storeId);
         })->get();
 
         // Mapeia os produtos para o formato desejado
@@ -31,7 +31,7 @@ class GetProductsByStoreService extends Controller
 
         // Retorna a resposta JSON
         return response()->json([
-            'store' => $request->get('store_id'),
+            'store' => $storeId,
             'products' => $formattedProducts,
         ]);
     }

@@ -5,35 +5,37 @@
         "version": "0.1"
     },
     "paths": {
-        "/api/products/by-store/{store}": {
+        "/api/produto/getproductsbystore/{store}": {
             "get": {
                 "tags": [
-                    "Produtos"
+                    "product"
                 ],
-                "summary": "Obtém produtos associados a uma loja específica",
-                "description": "Busca produtos associados a uma loja específica e retorna uma lista formatada de produtos.",
-                "operationId": "fbc4e081bef79011c7bc1549760dba71",
+                "summary": "Obter produtos de uma loja específica",
+                "description": "Retorna uma lista de produtos de uma loja, filtrando pelo ID da loja.",
+                "operationId": "getProductsByStore",
                 "parameters": [
                     {
                         "name": "store",
                         "in": "path",
-                        "description": "ID da loja para a qual os produtos devem ser buscados.",
+                        "description": "ID da loja",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Lista de produtos associados à loja",
+                        "description": "Lista de produtos retornada com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "store": {
-                                            "description": "ID da loja para a qual os produtos foram buscados.",
-                                            "type": "integer"
+                                            "description": "ID da loja",
+                                            "type": "integer",
+                                            "example": 1
                                         },
                                         "products": {
                                             "type": "array",
@@ -41,23 +43,31 @@
                                                 "properties": {
                                                     "id": {
                                                         "description": "ID do produto",
-                                                        "type": "integer"
+                                                        "type": "integer",
+                                                        "example": 1
                                                     },
                                                     "title": {
-                                                        "description": "Título do produto",
-                                                        "type": "string"
+                                                        "description": "Nome do produto",
+                                                        "type": "string",
+                                                        "example": "Coca Gelada"
                                                     },
                                                     "price": {
                                                         "description": "Preço do produto",
-                                                        "type": "string"
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 179.9
                                                     },
                                                     "promotionalPrice": {
                                                         "description": "Preço promocional do produto",
-                                                        "type": "integer"
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 161.91
                                                     },
                                                     "image": {
                                                         "description": "URL da imagem do produto",
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "format": "url",
+                                                        "example": "https://example.com/image.jpg"
                                                     }
                                                 },
                                                 "type": "object"
@@ -69,21 +79,129 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Erro de solicitação",
+                    "404": {
+                        "description": "Loja ou produtos não encontrados"
+                    }
+                }
+            }
+        },
+        "/api/produto/getstockbystoreandproduct/{store_id}/{product_id}": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Obter estoque de um produto específico em uma loja",
+                "description": "Retorna o estoque de um produto específico em uma loja específica, filtrando pelos IDs da loja e do produto.",
+                "operationId": "getStockByStoreAndProduct",
+                "parameters": [
+                    {
+                        "name": "store_id",
+                        "in": "path",
+                        "description": "ID da loja",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "product_id",
+                        "in": "path",
+                        "description": "ID do produto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Estoque do produto retornado com sucesso",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "error": {
-                                            "description": "Descrição do erro",
-                                            "type": "string"
+                                        "stock": {
+                                            "properties": {
+                                                "id": {
+                                                    "description": "ID do estoque",
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "amount": {
+                                                    "description": "Quantidade disponível no estoque",
+                                                    "type": "integer",
+                                                    "example": 10
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Estoque não encontrado"
+                    }
+                }
+            }
+        },
+        "/api/produto/getstockbystore/{store}": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Obter estoque de uma loja específica",
+                "description": "Retorna uma lista de estoques de todos os produtos disponíveis em uma loja, filtrando pelo ID da loja.",
+                "operationId": "getStockByStore",
+                "parameters": [
+                    {
+                        "name": "store",
+                        "in": "path",
+                        "description": "ID da loja",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de estoques retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "stock": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "description": "ID do estoque",
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "amount": {
+                                                        "description": "Quantidade disponível no estoque",
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Loja ou estoques não encontrados"
                     }
                 }
             }
@@ -91,8 +209,8 @@
     },
     "tags": [
         {
-            "name": "Produtos",
-            "description": "Produtos"
+            "name": "product",
+            "description": "product"
         }
     ]
 }

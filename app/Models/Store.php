@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Store extends Model
 {
@@ -13,7 +14,7 @@ class Store extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->hasMany(Product::class);
     }
 
     public function users()
@@ -26,5 +27,15 @@ class Store extends Model
     {
         return $this->belongsToMany(Sale::class);
 
+    }
+
+    public function stocks()
+    {
+        // Utiliza whereHas para buscar os produtos da loja e seus estoques
+        return Stock::whereHas('product', function ($query) {
+            $query->whereHas('stores', function ($query) {
+                $query->where('store_id', $this->id);
+            });
+        })->get();
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\UserMeController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Product\GetProductsByStoreController;
+use App\Http\Controllers\Product\GetStockByStoreAndProductController;
+use App\Http\Controllers\Product\GetStockByStoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\SaleController;
@@ -44,7 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('produto', ProductController::class);
 
     Route::get('produto/getproductsbystore/{store}', GetProductsByStoreController::class)->name('product.getByStore');
-    Route::get('produto/getproductsstockbystore/{store}', action: [ProductController::class, 'getProductsStockByStore'])->name('product.getByStore');
+    Route::get('produto/getstockbystore/{store}', action: GetStockByStoreController::class)->name('product.getstockbystore');
+    Route::get('produto/getstockbystoreandproduct/{store_id}/{product_id}', action: GetStockByStoreAndProductController::class)->name('product.getstockbystoreandproduct');
 
 
     Route::resource('priceproduct', ProductPriceController::class);
