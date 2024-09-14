@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Product;
+namespace App\Http\Controllers\Stock;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\GetProductsByStoreRequest;
-use App\Http\Services\Product\GetStockService;
+use App\Http\Services\Stock\GetStockService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

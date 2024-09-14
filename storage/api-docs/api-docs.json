@@ -5,6 +5,108 @@
         "version": "0.1"
     },
     "paths": {
+        "/product/getproductsbyid/{product}": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get Products by ID",
+                "description": "Retrieve a list of products by their ID. Returns a list of products associated with the specified store ID.",
+                "operationId": "getProductsById",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "ID of the product to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "store": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "products": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Sample Product"
+                                                    },
+                                                    "price": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 19.99
+                                                    },
+                                                    "promotionalPrice": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 15.99
+                                                    },
+                                                    "image": {
+                                                        "type": "string",
+                                                        "example": "https://example.com/image.jpg"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/produto/getproductsbystore/{store}": {
             "get": {
                 "tags": [
@@ -85,7 +187,7 @@
                 }
             }
         },
-        "/api/produto/getstockbystoreandproduct/{store_id}/{product_id}": {
+        "/api/produto/getstockbystoreandproduct/{store}/{product}": {
             "get": {
                 "tags": [
                     "product"
@@ -95,7 +197,7 @@
                 "operationId": "getStockByStoreAndProduct",
                 "parameters": [
                     {
-                        "name": "store_id",
+                        "name": "store",
                         "in": "path",
                         "description": "ID da loja",
                         "required": true,
@@ -105,7 +207,7 @@
                         }
                     },
                     {
-                        "name": "product_id",
+                        "name": "product",
                         "in": "path",
                         "description": "ID do produto",
                         "required": true,

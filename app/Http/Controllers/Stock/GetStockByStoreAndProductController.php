@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Product;
+namespace App\Http\Controllers\Stock;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\GetProductsByStoreAndProductRequest;
-use App\Http\Services\Product\GetStockService;
+use App\Http\Requests\Stock\GetProductsByStoreAndProductRequest;
+use App\Http\Services\Stock\GetStockService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -17,13 +17,13 @@ class GetStockByStoreAndProductController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/produto/getstockbystoreandproduct/{store_id}/{product_id}",
+     *     path="/api/produto/getstockbystoreandproduct/{store}/{product}",
      *     tags={"product"},
      *     summary="Obter estoque de um produto específico em uma loja",
      *     description="Retorna o estoque de um produto específico em uma loja específica, filtrando pelos IDs da loja e do produto.",
      *     operationId="getStockByStoreAndProduct",
      *     @OA\Parameter(
-     *         name="store_id",
+     *         name="store",
      *         in="path",
      *         required=true,
      *         description="ID da loja",
@@ -33,7 +33,7 @@ class GetStockByStoreAndProductController extends Controller
      *         )
      *     ),
      *     @OA\Parameter(
-     *         name="product_id",
+     *         name="product",
      *         in="path",
      *         required=true,
      *         description="ID do produto",
