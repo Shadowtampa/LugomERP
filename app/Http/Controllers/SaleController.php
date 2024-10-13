@@ -181,4 +181,17 @@ class SaleController extends Controller
         // Redirect to a view or route after successfully updating the product
         return redirect()->route('promocoes.index')->with('success', 'Sale deleted successfully');
     }
+
+    public function allSales($storeId){
+
+        // $sale = Sale::all();  
+        
+        $sale = Sale::whereHas('stores', function ($query) use ($storeId) {
+            $query->where('store_id', $storeId);
+        })->get();
+
+        return response()->json([
+            'sale' => $sale,
+        ]);
+    }
 }
