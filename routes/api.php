@@ -16,6 +16,7 @@ use App\Http\Controllers\ProductPriceController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\Twitter\PublishCampaingController;
 use App\Http\Controllers\VendaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('apisupplier', SupplierController::class);
 
     Route::post('ai/generatecampaing/', GenerateCampaingController::class)->name('ai.campainggeneration');
+    Route::post('twitter/publishcampaing/', PublishCampaingController::class)->name('publishcampaing.twitter');
 
 });
 
